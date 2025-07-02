@@ -4,6 +4,8 @@ import Typography from '@mui/material/Typography';
 import { DashboardContent } from 'src/layouts/dashboard';
 import { _posts, _tasks, _traffic, _timeline } from 'src/_mock';
 
+import RecentBuildsWidget from 'src/components/widgets/RecentBuildsWidget';
+
 import { AnalyticsNews } from '../analytics-news';
 import { AnalyticsTasks } from '../analytics-tasks';
 import { AnalyticsCurrentVisits } from '../analytics-current-visits';
@@ -26,10 +28,10 @@ export function OverviewAnalyticsView() {
       <Grid container spacing={3}>
         <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <AnalyticsWidgetSummary
-            title="Weekly sales"
+            title="Total Pipelines"
             percent={2.6}
             total={714000}
-            icon={<img alt="Weekly sales" src="/assets/icons/glass/ic-glass-bag.svg" />}
+            icon={<img alt="Total Pipelines" src="/assets/icons/glass/ic-glass-bag.svg" />}
             chart={{
               categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
               series: [22, 8, 35, 50, 82, 84, 77, 12],
@@ -39,11 +41,11 @@ export function OverviewAnalyticsView() {
 
         <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <AnalyticsWidgetSummary
-            title="New users"
+            title="Active Builds"
             percent={-0.1}
             total={1352831}
             color="secondary"
-            icon={<img alt="New users" src="/assets/icons/glass/ic-glass-users.svg" />}
+            icon={<img alt="Active Builds" src="/assets/icons/glass/ic-glass-users.svg" />}
             chart={{
               categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
               series: [56, 47, 40, 62, 73, 30, 23, 54],
@@ -53,11 +55,11 @@ export function OverviewAnalyticsView() {
 
         <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <AnalyticsWidgetSummary
-            title="Purchase orders"
+            title="Queued Jobs"
             percent={2.8}
             total={1723315}
             color="warning"
-            icon={<img alt="Purchase orders" src="/assets/icons/glass/ic-glass-buy.svg" />}
+            icon={<img alt="Queued Jobs" src="/assets/icons/glass/ic-glass-buy.svg" />}
             chart={{
               categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
               series: [40, 70, 50, 28, 70, 75, 7, 64],
@@ -67,11 +69,11 @@ export function OverviewAnalyticsView() {
 
         <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <AnalyticsWidgetSummary
-            title="Messages"
+            title="Failed Builds"
             percent={3.6}
             total={234}
             color="error"
-            icon={<img alt="Messages" src="/assets/icons/glass/ic-glass-message.svg" />}
+            icon={<img alt="Failed Builds" src="/assets/icons/glass/ic-glass-message.svg" />}
             chart={{
               categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
               series: [56, 30, 23, 54, 47, 40, 62, 73],
@@ -81,13 +83,13 @@ export function OverviewAnalyticsView() {
 
         <Grid size={{ xs: 12, md: 6, lg: 4 }}>
           <AnalyticsCurrentVisits
-            title="Current visits"
+            title="Projects"
             chart={{
               series: [
-                { label: 'America', value: 3500 },
-                { label: 'Asia', value: 2500 },
-                { label: 'Europe', value: 1500 },
-                { label: 'Africa', value: 500 },
+                { label: 'Project Alpha', value: 20 },
+                { label: 'Project Beta', value: 15 },
+                { label: 'Project Gamma', value: 10 },
+                { label: 'Project Delta', value: 5 },
               ],
             }}
           />
@@ -95,13 +97,13 @@ export function OverviewAnalyticsView() {
 
         <Grid size={{ xs: 12, md: 6, lg: 8 }}>
           <AnalyticsWebsiteVisits
-            title="Website visits"
-            subheader="(+43%) than last year"
+            title="Project Build Results"
+            subheader="Success vs Failure"
             chart={{
-              categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+              categories: ['Alpha', 'Beta', 'Gamma', 'Delta'],
               series: [
-                { name: 'Team A', data: [43, 33, 22, 37, 67, 68, 37, 24, 55] },
-                { name: 'Team B', data: [51, 70, 47, 67, 40, 37, 24, 70, 24] },
+                { name: 'Success', data: [18, 12, 8, 3] },
+                { name: 'Failure', data: [2, 3, 2, 2] },
               ],
             }}
           />
@@ -109,13 +111,13 @@ export function OverviewAnalyticsView() {
 
         <Grid size={{ xs: 12, md: 6, lg: 8 }}>
           <AnalyticsConversionRates
-            title="Conversion rates"
-            subheader="(+43%) than last year"
+            title="Project Commit Count"
+            subheader="Current vs Last Month"
             chart={{
-              categories: ['Italy', 'Japan', 'China', 'Canada', 'France'],
+              categories: ['Alpha', 'Beta', 'Gamma', 'Delta'],
               series: [
-                { name: '2022', data: [44, 55, 41, 64, 22] },
-                { name: '2023', data: [53, 32, 33, 52, 13] },
+                { name: 'Current Month', data: [120, 90, 60, 30] },
+                { name: 'Last Month', data: [100, 80, 70, 40] },
               ],
             }}
           />
@@ -123,24 +125,66 @@ export function OverviewAnalyticsView() {
 
         <Grid size={{ xs: 12, md: 6, lg: 4 }}>
           <AnalyticsCurrentSubject
-            title="Current subject"
+            title="Project Commit Difference"
             chart={{
-              categories: ['English', 'History', 'Physics', 'Geography', 'Chinese', 'Math'],
+              categories: ['Alpha', 'Beta', 'Gamma', 'Delta'],
               series: [
-                { name: 'Series 1', data: [80, 50, 30, 40, 100, 20] },
-                { name: 'Series 2', data: [20, 30, 40, 80, 20, 80] },
-                { name: 'Series 3', data: [44, 76, 78, 13, 43, 10] },
+                { name: 'Commit Difference', data: [20, 10, -10, -10] },
               ],
             }}
           />
         </Grid>
 
         <Grid size={{ xs: 12, md: 6, lg: 8 }}>
-          <AnalyticsNews title="News" list={_posts.slice(0, 5)} />
+          <AnalyticsNews
+            title="Projects"
+            list={[
+              {
+                title: 'Alpha',
+                description: 'Main CI/CD pipeline for core product.',
+              },
+              {
+                title: 'Beta',
+                description: 'Staging environment deployment pipeline.',
+              },
+              {
+                title: 'Gamma',
+                description: 'Automated E2E testing pipeline.',
+              },
+              {
+                title: 'Delta',
+                description: 'Legacy system migration pipeline.',
+              },
+            ]}
+          />
         </Grid>
 
         <Grid size={{ xs: 12, md: 6, lg: 4 }}>
-          <AnalyticsOrderTimeline title="Order timeline" list={_timeline} />
+          <AnalyticsOrderTimeline
+            title="Project Timeline"
+            list={[
+              {
+                color: 'primary',
+                title: 'Project Alpha created',
+                time: '2024-07-01 10:00',
+              },
+              {
+                color: 'success',
+                title: 'Project Beta edited',
+                time: '2024-07-01 09:30',
+              },
+              {
+                color: 'info',
+                title: 'Project Gamma created',
+                time: '2024-06-30 18:00',
+              },
+              {
+                color: 'warning',
+                title: 'Project Delta created',
+                time: '2024-06-29 15:00',
+              },
+            ]}
+          />
         </Grid>
 
         <Grid size={{ xs: 12, md: 6, lg: 4 }}>
@@ -149,6 +193,10 @@ export function OverviewAnalyticsView() {
 
         <Grid size={{ xs: 12, md: 6, lg: 8 }}>
           <AnalyticsTasks title="Tasks" list={_tasks} />
+        </Grid>
+
+        <Grid size={{ xs: 12, md: 6, lg: 4 }}>
+          <RecentBuildsWidget />
         </Grid>
       </Grid>
     </DashboardContent>

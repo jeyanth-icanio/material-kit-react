@@ -8,6 +8,7 @@ import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import InputAdornment from '@mui/material/InputAdornment';
+import Grid from '@mui/material/Grid';
 
 import { useRouter } from 'src/routes/hooks';
 
@@ -34,9 +35,9 @@ export function SignInView() {
     >
       <TextField
         fullWidth
-        name="email"
-        label="Email address"
-        defaultValue="hello@gmail.com"
+        name="emailOrUsername"
+        label="Email or Username"
+        defaultValue=""
         sx={{ mb: 3 }}
         slotProps={{
           inputLabel: { shrink: true },
@@ -51,7 +52,7 @@ export function SignInView() {
         fullWidth
         name="password"
         label="Password"
-        defaultValue="@demo1234"
+        defaultValue=""
         type={showPassword ? 'text' : 'password'}
         slotProps={{
           inputLabel: { shrink: true },
@@ -99,7 +100,7 @@ export function SignInView() {
             color: 'text.secondary',
           }}
         >
-          Don’t have an account?
+          Don&apos;t have an account?
           <Link variant="subtitle2" sx={{ ml: 0.5 }}>
             Get started
           </Link>
@@ -131,6 +132,9 @@ export function SignInView() {
           <Iconify width={22} icon="socials:twitter" />
         </IconButton>
       </Box>
+      <Grid size={{ xs: 12, md: 6, lg: 4 }}>
+        {/* AgentsWidget component is removed as per the instructions */}
+      </Grid>
     </>
   );
 }
