@@ -1,12 +1,12 @@
 import React from 'react';
 
 import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 import Chip from '@mui/material/Chip';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
+import CardContent from '@mui/material/CardContent';
+import ListItemText from '@mui/material/ListItemText';
 
 const agents = [
   { name: 'Agent-1', status: 'Online', busy: false, type: 'Docker', lastActivity: '2m ago' },

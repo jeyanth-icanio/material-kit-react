@@ -1,24 +1,31 @@
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 
+import { _projects, _projectTasks } from 'src/_mock';
 import { DashboardContent } from 'src/layouts/dashboard';
-import { _posts, _tasks, _traffic, _timeline } from 'src/_mock';
 
 import RecentBuildsWidget from 'src/components/widgets/RecentBuildsWidget';
 
 import { AnalyticsNews } from '../analytics-news';
-import { AnalyticsTasks } from '../analytics-tasks';
+import { AnalyticsProjects } from '../analytics-projects';
+import { AnalyticsProjectTasks } from '../analytics-project-tasks';
 import { AnalyticsCurrentVisits } from '../analytics-current-visits';
 import { AnalyticsOrderTimeline } from '../analytics-order-timeline';
 import { AnalyticsWebsiteVisits } from '../analytics-website-visits';
 import { AnalyticsWidgetSummary } from '../analytics-widget-summary';
-import { AnalyticsTrafficBySite } from '../analytics-traffic-by-site';
 import { AnalyticsCurrentSubject } from '../analytics-current-subject';
 import { AnalyticsConversionRates } from '../analytics-conversion-rates';
 
 // ----------------------------------------------------------------------
 
 export function OverviewAnalyticsView() {
+  const handleLogoUpload = (projectId: string, file: File) => {
+    // Handle logo upload logic here
+    console.log('Uploading logo for project:', projectId, file);
+    // You can implement actual file upload logic here
+    // For now, we'll just log the action
+  };
+
   return (
     <DashboardContent maxWidth="xl">
       <Typography variant="h4" sx={{ mb: { xs: 3, md: 5 } }}>
@@ -140,20 +147,32 @@ export function OverviewAnalyticsView() {
             title="Projects"
             list={[
               {
+                id: 'alpha',
                 title: 'Alpha',
+                coverUrl: '/assets/images/project-alpha.jpg',
                 description: 'Main CI/CD pipeline for core product.',
+                postedAt: '2024-07-01 10:00',
               },
               {
+                id: 'beta',
                 title: 'Beta',
+                coverUrl: '/assets/images/project-beta.jpg',
                 description: 'Staging environment deployment pipeline.',
+                postedAt: '2024-07-01 09:30',
               },
               {
+                id: 'gamma',
                 title: 'Gamma',
+                coverUrl: '/assets/images/project-gamma.jpg',
                 description: 'Automated E2E testing pipeline.',
+                postedAt: '2024-06-30 18:00',
               },
               {
+                id: 'delta',
                 title: 'Delta',
+                coverUrl: '/assets/images/project-delta.jpg',
                 description: 'Legacy system migration pipeline.',
+                postedAt: '2024-06-29 15:00',
               },
             ]}
           />
@@ -164,22 +183,26 @@ export function OverviewAnalyticsView() {
             title="Project Timeline"
             list={[
               {
-                color: 'primary',
+                id: 'alpha-created',
+                type: 'order1',
                 title: 'Project Alpha created',
                 time: '2024-07-01 10:00',
               },
               {
-                color: 'success',
+                id: 'beta-edited',
+                type: 'order2',
                 title: 'Project Beta edited',
                 time: '2024-07-01 09:30',
               },
               {
-                color: 'info',
+                id: 'gamma-created',
+                type: 'order3',
                 title: 'Project Gamma created',
                 time: '2024-06-30 18:00',
               },
               {
-                color: 'warning',
+                id: 'delta-created',
+                type: 'order4',
                 title: 'Project Delta created',
                 time: '2024-06-29 15:00',
               },
@@ -188,11 +211,21 @@ export function OverviewAnalyticsView() {
         </Grid>
 
         <Grid size={{ xs: 12, md: 6, lg: 4 }}>
-          <AnalyticsTrafficBySite title="Traffic by site" list={_traffic} />
+          <AnalyticsProjects 
+            title="Projects" 
+            subheader="Click camera icon to upload logo"
+            list={_projects}
+            onLogoUpload={handleLogoUpload}
+          />
         </Grid>
 
         <Grid size={{ xs: 12, md: 6, lg: 8 }}>
-          <AnalyticsTasks title="Tasks" list={_tasks} />
+          <AnalyticsProjectTasks 
+            title="Project Tasks" 
+            subheader="Filter by project"
+            list={_projectTasks}
+            projects={_projects}
+          />
         </Grid>
 
         <Grid size={{ xs: 12, md: 6, lg: 4 }}>

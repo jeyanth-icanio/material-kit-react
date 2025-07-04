@@ -1,12 +1,11 @@
 import React from 'react';
 
 import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Chip from '@mui/material/Chip';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
+import CardContent from '@mui/material/CardContent';
+import ListItemText from '@mui/material/ListItemText';
 
 const projects = [
   {
@@ -26,19 +25,6 @@ const projects = [
     description: 'Legacy system migration pipeline.',
   },
 ];
-
-function getStatusColor(status: string) {
-  switch (status) {
-    case 'Success':
-      return 'success';
-    case 'Running':
-      return 'info';
-    case 'Failed':
-      return 'error';
-    default:
-      return 'default';
-  }
-}
 
 export default function RecentBuildsWidget() {
   return (
