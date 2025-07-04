@@ -1,8 +1,8 @@
 import type { RouteObject } from 'react-router';
 
 import { lazy, Suspense } from 'react';
-import { Outlet } from 'react-router-dom';
 import { varAlpha } from 'minimal-shared/utils';
+import { Outlet, Navigate, useLocation } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
@@ -17,7 +17,9 @@ export const BlogPage = lazy(() => import('src/pages/blog'));
 export const UserPage = lazy(() => import('src/pages/user'));
 export const SignInPage = lazy(() => import('src/pages/sign-in'));
 export const ProductsPage = lazy(() => import('src/pages/products'));
+export const SettingsPage = lazy(() => import('src/pages/settings'));
 export const Page404 = lazy(() => import('src/pages/page-not-found'));
+export const ProjectsPage = lazy(() => import('src/pages/projects'));
 
 const renderFallback = () => (
   <Box
@@ -39,31 +41,59 @@ const renderFallback = () => (
   </Box>
 );
 
+type RequireRoleProps = {
+  allowedRoles: string[];
+  children: React.ReactNode;
+};
+
+function RequireRole({ allowedRoles, children }: RequireRoleProps) {
+  const location = useLocation();
+  const userRole = localStorage.getItem('userRole');
+  if (!userRole || !allowedRoles.includes(userRole)) {
+    return <Navigate to="/login" replace state={{ from: location }} />;
+  }
+  return <>{children}</>;
+}
+
 export const routesSection: RouteObject[] = [
   {
-    path: 'admin',
-    element: (
-      <DashboardLayout>
-        <Suspense fallback={renderFallback()}>
-          <DashboardPage />
-        </Suspense>
-      </DashboardLayout>
-    ),
+    path: '/',
+    element: <Navigate to="/login" replace />,
   },
   {
+    path: 'owner',
     element: (
-      <DashboardLayout>
-        <Suspense fallback={renderFallback()}>
-          <Outlet />
-        </Suspense>
-      </DashboardLayout>
+      <RequireRole allowedRoles={['owner']}>
+        <DashboardLayout>
+          <Suspense fallback={renderFallback()}>
+            <Outlet />
+          </Suspense>
+        </DashboardLayout>
+      </RequireRole>
     ),
     children: [
       { index: true, element: <DashboardPage /> },
       { path: 'user', element: <UserPage /> },
       { path: 'products', element: <ProductsPage /> },
       { path: 'blog', element: <BlogPage /> },
+      { path: 'settings', element: <SettingsPage /> },
+      { path: 'projects', element: <ProjectsPage /> },
+      { path: 'pipelines', element: <ProductsPage /> },
+      { path: 'builds', element: <ProductsPage /> },
+      { path: 'agents', element: <ProductsPage /> },
     ],
+  },
+  {
+    path: 'admin',
+    element: <Navigate to="/owner" replace />,
+  },
+  {
+    path: 'login',
+    element: (
+      <AuthLayout>
+        <SignInPage />
+      </AuthLayout>
+    ),
   },
   {
     path: 'sign-in',

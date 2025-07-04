@@ -14,27 +14,32 @@ export type NavItem = {
 export const navData = [
   {
     title: 'Dashboard',
-    path: '/admin',
+    path: '/owner',
     icon: icon('ic-analytics'),
   },
   {
     title: 'Projects',
-    path: '/admin/projects',
+    path: '/owner/projects',
     icon: icon('ic-folder'),
   },
   {
     title: 'Pipelines',
-    path: '/admin/pipelines',
+    path: '/owner/pipelines',
     icon: icon('ic-git-branch'),
   },
   {
     title: 'Builds',
-    path: '/admin/builds',
+    path: '/owner/builds',
     icon: icon('ic-play'),
   },
   {
     title: 'Agents',
-    path: '/admin/agents',
+    path: '/owner/agents',
     icon: icon('ic-server'),
+  },
+  {
+    title: 'Settings',
+    path: '/owner/settings',
+    icon: icon('ic-settings'),
   },
 ];

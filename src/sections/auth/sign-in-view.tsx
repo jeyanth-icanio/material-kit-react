@@ -5,6 +5,7 @@ import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
+import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
@@ -20,10 +21,18 @@ export function SignInView() {
   const router = useRouter();
 
   const [showPassword, setShowPassword] = useState(false);
+  const [role, setRole] = useState('admin'); // default to admin for demo
 
   const handleSignIn = useCallback(() => {
-    router.push('/');
-  }, [router]);
+    localStorage.setItem('userRole', role);
+    if (role === 'admin') {
+      router.push('/admin');
+    } else if (role === 'owner') {
+      router.push('/owner');
+    } else {
+      router.push('/');
+    }
+  }, [router, role]);
 
   const renderForm = (
     <Box
@@ -68,6 +77,18 @@ export function SignInView() {
         }}
         sx={{ mb: 3 }}
       />
+
+      <TextField
+        select
+        label="Role"
+        value={role}
+        onChange={e => setRole(e.target.value)}
+        fullWidth
+        sx={{ mb: 3 }}
+      >
+        <MenuItem value="admin">Admin</MenuItem>
+        <MenuItem value="owner">Owner</MenuItem>
+      </TextField>
 
       <Button
         fullWidth

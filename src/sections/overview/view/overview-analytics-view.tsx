@@ -1,5 +1,6 @@
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+import { useEffect, useState } from 'react';
 
 import { _projects, _projectTasks } from 'src/_mock';
 import { DashboardContent } from 'src/layouts/dashboard';
@@ -15,10 +16,59 @@ import { AnalyticsWebsiteVisits } from '../analytics-website-visits';
 import { AnalyticsWidgetSummary } from '../analytics-widget-summary';
 import { AnalyticsCurrentSubject } from '../analytics-current-subject';
 import { AnalyticsConversionRates } from '../analytics-conversion-rates';
+import type { ProjectForm } from 'src/pages/projects';
 
 // ----------------------------------------------------------------------
 
 export function OverviewAnalyticsView() {
+  const [projects, setProjects] = useState<any[]>([]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('projects');
+    setProjects(saved ? JSON.parse(saved) : []);
+  }, []);
+
+  // Group projects by name (show only one per unique name)
+  const uniqueProjects: ProjectForm[] = Object.values(
+    projects.reduce((acc, project) => {
+      if (!acc[(project as ProjectForm).name]) {
+        acc[(project as ProjectForm).name] = project;
+      }
+      return acc;
+    }, {} as Record<string, ProjectForm>)
+  );
+
+  // Example: project count
+  const projectCount = uniqueProjects.length;
+
+  // Example: for AnalyticsCurrentVisits (pie chart of project names)
+  const projectVisitsData = {
+    series: uniqueProjects.map((p) => ({ label: p.name, value: 1 })),
+  };
+
+  // Example: for AnalyticsNews (list of projects)
+  const projectNewsList = uniqueProjects.map((p) => ({
+    id: p.id,
+    title: p.name,
+    coverUrl: '', // You can add a default or use p.logo if you have a URL
+    description: p.description,
+    postedAt: p.createdAt,
+  }));
+
+  // Map uniqueProjects to the required shape for AnalyticsProjects
+  const analyticsProjectsList = uniqueProjects.map((p) => ({
+    id: p.id,
+    name: p.name,
+    logoUrl: typeof p.logo === 'string' ? p.logo : '',
+    totalBuilds: p.buildCount ?? 0,
+    status:
+      p.status === 'active'
+        ? 'active'
+        : p.status === 'paused'
+        ? 'inactive'
+        : 'maintenance',
+  }));
+
   const handleLogoUpload = (projectId: string, file: File) => {
     // Handle logo upload logic here
     console.log('Uploading logo for project:', projectId, file);
@@ -35,13 +85,13 @@ export function OverviewAnalyticsView() {
       <Grid container spacing={3}>
         <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <AnalyticsWidgetSummary
-            title="Total Pipelines"
-            percent={2.6}
-            total={714000}
-            icon={<img alt="Total Pipelines" src="/assets/icons/glass/ic-glass-bag.svg" />}
+            title="Total Projects"
+            percent={0}
+            total={projectCount}
+            icon={<img alt="Total Projects" src="/assets/icons/glass/ic-glass-bag.svg" />}
             chart={{
-              categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
-              series: [22, 8, 35, 50, 82, 84, 77, 12],
+              categories: [],
+              series: [],
             }}
           />
         </Grid>
@@ -91,14 +141,7 @@ export function OverviewAnalyticsView() {
         <Grid size={{ xs: 12, md: 6, lg: 4 }}>
           <AnalyticsCurrentVisits
             title="Projects"
-            chart={{
-              series: [
-                { label: 'Project Alpha', value: 20 },
-                { label: 'Project Beta', value: 15 },
-                { label: 'Project Gamma', value: 10 },
-                { label: 'Project Delta', value: 5 },
-              ],
-            }}
+            chart={projectVisitsData}
           />
         </Grid>
 
@@ -145,36 +188,7 @@ export function OverviewAnalyticsView() {
         <Grid size={{ xs: 12, md: 6, lg: 8 }}>
           <AnalyticsNews
             title="Projects"
-            list={[
-              {
-                id: 'alpha',
-                title: 'Alpha',
-                coverUrl: '/assets/images/project-alpha.jpg',
-                description: 'Main CI/CD pipeline for core product.',
-                postedAt: '2024-07-01 10:00',
-              },
-              {
-                id: 'beta',
-                title: 'Beta',
-                coverUrl: '/assets/images/project-beta.jpg',
-                description: 'Staging environment deployment pipeline.',
-                postedAt: '2024-07-01 09:30',
-              },
-              {
-                id: 'gamma',
-                title: 'Gamma',
-                coverUrl: '/assets/images/project-gamma.jpg',
-                description: 'Automated E2E testing pipeline.',
-                postedAt: '2024-06-30 18:00',
-              },
-              {
-                id: 'delta',
-                title: 'Delta',
-                coverUrl: '/assets/images/project-delta.jpg',
-                description: 'Legacy system migration pipeline.',
-                postedAt: '2024-06-29 15:00',
-              },
-            ]}
+            list={projectNewsList}
           />
         </Grid>
 
@@ -214,7 +228,7 @@ export function OverviewAnalyticsView() {
           <AnalyticsProjects 
             title="Projects" 
             subheader="Click camera icon to upload logo"
-            list={_projects}
+            list={analyticsProjectsList}
             onLogoUpload={handleLogoUpload}
           />
         </Grid>
@@ -224,7 +238,7 @@ export function OverviewAnalyticsView() {
             title="Project Tasks" 
             subheader="Filter by project"
             list={_projectTasks}
-            projects={_projects}
+            projects={uniqueProjects}
           />
         </Grid>
 
